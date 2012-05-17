@@ -1,4 +1,6 @@
-vail
-====
+Vert.x on Vail
+==============
 
-vert.x on vail
+Like nothing on *ails.
+
+(c) 2012 The original author and contributors.
