@@ -1,7 +1,7 @@
 load 'vertx.js'
 
 webServerConf =
-	port: 8082
+	port: 8080
 	host: 'localhost'
 	ssl: false
 	bridge: true
