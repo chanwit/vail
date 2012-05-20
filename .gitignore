@@ -1,0 +1,7 @@
+dist/
+vail-bootstrap/.classpath
+vail-bootstrap/.gradle/
+vail-bootstrap/.project
+vail-bootstrap/.settings/
+vail-bootstrap/build/
+vertx/
