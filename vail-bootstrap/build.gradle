@@ -1,0 +1,7 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+task install(type: Copy) {
+	from 'build/libs'
+	into '../dist'
+}
