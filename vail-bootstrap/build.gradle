@@ -1,6 +1,14 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.mozilla:rhino:1.7R3'
+}
+
 task install(type: Copy) {
 	from 'build/libs'
 	into '../dist'

@@ -10,6 +10,8 @@ import java.nio.file.attribute.*;
 import java.io.*;
 import java.util.*;
 
+import org.jcoffeescript.Main;
+
 
 public class Starter {
 
@@ -95,17 +97,19 @@ public class Starter {
     /**
      * Creates a WatchService and registers the given directory
      */
-    Starter(Path dir, boolean recursive) throws IOException {
+    Starter(Path workdir, String appPath, boolean recursive) throws IOException {
         this.watcher = FileSystems.getDefault().newWatchService();
         this.keys = new HashMap<WatchKey,Path>();
         this.recursive = recursive;
 
+        Path watchingPath = Paths.get(workdir.toString(), appPath);
+
         if (recursive) {
-            System.out.format("Scanning %s ...\n", dir);
-            registerAll(dir);
+            System.out.format("Scanning %s ...\n", watchingPath);
+            registerAll(watchingPath);
             System.out.println("Done.");
         } else {
-            register(dir);
+            register(watchingPath);
         }
 
         // enable trace after initial registration
@@ -137,7 +141,7 @@ public class Starter {
                 "run", "app.js");
         pb.redirectError(Redirect.INHERIT);
         pb.redirectOutput(Redirect.INHERIT);
-        pb.directory(dir.toFile());
+        pb.directory(Paths.get(workdir.toString(), "target").toFile());
         this.p = pb.start();
         System.out.println(p);
 
@@ -202,7 +206,7 @@ public class Starter {
 
             for (WatchEvent<?> event: key.pollEvents()) {
                 Kind<?> kind = event.kind();
-                System.out.println("watch loop");
+
                 if (kind == OVERFLOW) {
                     continue;
                 }
@@ -267,8 +271,21 @@ public class Starter {
         System.out.println(VAIL_HOME);
         System.out.println(WORK_DIR);
 
-        Path dir = Paths.get(WORK_DIR + "\\app");
-        new Starter(dir, true).processEvents();
+        compileAppJS(WORK_DIR);
+        new Starter(Paths.get(WORK_DIR), "app", true).processEvents();
     }
+
+	private static void compileAppJS(String workdir) {
+		Path app    = Paths.get(workdir, "app",    "app.coffee");
+		Path target = Paths.get(workdir, "target", "app.js");
+
+		try {
+			PrintStream fw = new java.io.PrintStream(target.toFile());
+			FileInputStream fin = new FileInputStream(app.toFile());
+			new Main().execute(new String[]{"--bare"}, fw, fin);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
