@@ -17,9 +17,9 @@ public class Starter {
     private final Map<WatchKey,Path> keys;
     private final boolean recursive;
     private boolean trace = false;
-	private Process p;
-	private ProcessBuilder pb;
-	private Thread monitor;
+    private Process p;
+    private ProcessBuilder pb;
+    private Thread monitor;
 
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
@@ -59,37 +59,37 @@ public class Starter {
         });
     }
 
-	public boolean isWindows() {
-		String os = System.getProperty("os.name").toLowerCase();
-		return (os.indexOf("win") >= 0);
-	}
+    public boolean isWindows() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return (os.indexOf("win") >= 0);
+    }
 
-	public char PATH_SEPARATOR() {
-		if(isWindows()) {
-			return '\\';
-		} else {
-			return '/';
-		}
-	}
+    public char PATH_SEPARATOR() {
+        if(isWindows()) {
+            return '\\';
+        } else {
+            return '/';
+        }
+    }
 
-	public char JAR_SEPARATOR() {
-		if(isWindows()) {
-			return ';';
-		} else {
-			return ':';
-		}
-	}
+    public char JAR_SEPARATOR() {
+        if(isWindows()) {
+            return ';';
+        } else {
+            return ':';
+        }
+    }
 
     private String classpath(String path, String ...strings) {
-    	StringBuilder b = new StringBuilder();
-    	for(String s : strings) {
-    		if(s.endsWith(".jar")) {
-    			b.append(path + "\\lib\\jars\\" + s + ";");
-    		} else {
-    			b.append(path + "\\lib\\" + s +";");
-    		}
-    	}
-    	return b.toString();
+        StringBuilder b = new StringBuilder();
+        for(String s : strings) {
+            if(s.endsWith(".jar")) {
+                b.append(path + "\\lib\\jars\\" + s + ";");
+            } else {
+                b.append(path + "\\lib\\" + s +";");
+            }
+        }
+        return b.toString();
     }
 
     /**
@@ -114,27 +114,27 @@ public class Starter {
         String VERTX_HOME= System.getenv("VERTX_HOME");
         String JAVA_HOME =System.getenv("JAVA_HOME");
         if(JAVA_HOME == null) {
-        	System.out.println("JAVA_HOME is not set. Execution aborted.");
-        	System.exit(0);
+            System.out.println("JAVA_HOME is not set. Execution aborted.");
+            System.exit(0);
         }
         this.pb = new ProcessBuilder(JAVA_HOME + "\\bin\\java.exe",
-        		"-Djava.util.logging.config.file=" + VERTX_HOME + "\\conf\\logging.properties",
-        		"-Dvertx.install=" + VERTX_HOME,
-        		"-classpath",
-        		classpath(VERTX_HOME,
-        				"javascript",
-        				"ruby",
-        				"groovy.jar",
-        				"hazelcast.jar",
-        				"jackson-core.jar",
-        				"jackson-mapper.jar",
-        				"js.jar",
-        				"netty.jar",
-        				"vert.x-core.jar",
-        				"vert.x-platform.jar",
-        				"vert.x-testframework.jar"),
-        		"org.vertx.java.deploy.impl.cli.VertxMgr",
-        		"run", "app.js");
+                "-Djava.util.logging.config.file=" + VERTX_HOME + "\\conf\\logging.properties",
+                "-Dvertx.install=" + VERTX_HOME,
+                "-classpath",
+                classpath(VERTX_HOME,
+                        "javascript",
+                        "ruby",
+                        "groovy.jar",
+                        "hazelcast.jar",
+                        "jackson-core.jar",
+                        "jackson-mapper.jar",
+                        "js.jar",
+                        "netty.jar",
+                        "vert.x-core.jar",
+                        "vert.x-platform.jar",
+                        "vert.x-testframework.jar"),
+                "org.vertx.java.deploy.impl.cli.VertxMgr",
+                "run", "app.js");
         pb.redirectError(Redirect.INHERIT);
         pb.redirectOutput(Redirect.INHERIT);
         pb.directory(dir.toFile());
@@ -142,41 +142,41 @@ public class Starter {
         System.out.println(p);
 
         monitor = new Thread() {
-			@Override
-			public void run() {
-				while(true) {
-	            	Integer exitCode = null;
-	            	try {
-	            		exitCode = p.exitValue();
-	            	} catch(IllegalThreadStateException e) {
-	            		exitCode = null;
-	            	}
-	            	if(exitCode != null) {
-	            		System.out.println("The process got killed. Restarting ");
-	            		try {
-	    					p = pb.start();
-	    				} catch (IOException e) {
-	    					e.printStackTrace();
-	    				}
-	            	}
-	            	try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+            @Override
+            public void run() {
+                while(true) {
+                    Integer exitCode = null;
+                    try {
+                        exitCode = p.exitValue();
+                    } catch(IllegalThreadStateException e) {
+                        exitCode = null;
+                    }
+                    if(exitCode != null) {
+                        System.out.println("The process got killed. Restarting ");
+                        try {
+                            p = pb.start();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
         };
         monitor.setDaemon(true);
         monitor.start();
 
         Runtime.getRuntime().addShutdownHook(new Thread(){
-			@Override
-			public void run() {
-				System.out.println("Exiting ...");
-				p.destroy();
-			}
+            @Override
+            public void run() {
+                System.out.println("Exiting ...");
+                p.destroy();
+            }
 
         });
     }
@@ -218,15 +218,15 @@ public class Starter {
                 String filename = child.getFileName().toString();
                 System.out.println(" >> " + filename.endsWith(".js"));
                 System.out.println(" >> " + kind);
-				if(filename.endsWith(".js") && kind == ENTRY_MODIFY) {
-                	System.out.println("Destroying " + p);
-                	p.destroy();
-                	try {
-						p = pb.start();
-	                	System.out.println("Restarting " + p);
-					} catch (IOException e) {
-						System.out.println(e.getMessage());
-					}
+                if(filename.endsWith(".js") && kind == ENTRY_MODIFY) {
+                    System.out.println("Destroying " + p);
+                    p.destroy();
+                    try {
+                        p = pb.start();
+                        System.out.println("Restarting " + p);
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
 
                 // if directory is created, and watching recursively, then
@@ -258,14 +258,14 @@ public class Starter {
 
 
     public static void main(String[] args) throws IOException {
-    	String VAIL_HOME = System.getenv("VAIL_HOME");
-    	String WORK_DIR = System.getProperty("vail.work.dir");
-    	if(WORK_DIR == null) {
-    		WORK_DIR = System.getProperty("user.dir");
-    	}
+        String VAIL_HOME = System.getenv("VAIL_HOME");
+        String WORK_DIR = System.getProperty("vail.work.dir");
+        if(WORK_DIR == null) {
+            WORK_DIR = System.getProperty("user.dir");
+        }
 
-    	System.out.println(VAIL_HOME);
-    	System.out.println(WORK_DIR);
+        System.out.println(VAIL_HOME);
+        System.out.println(WORK_DIR);
 
         Path dir = Paths.get(WORK_DIR + "\\app");
         new Starter(dir, true).processEvents();
