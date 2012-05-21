@@ -156,7 +156,7 @@ public class Starter {
                         exitCode = null;
                     }
                     if(exitCode != null) {
-                        System.out.println("The process got killed. Restarting ");
+                        System.out.println("Vert.x process got killed. Restarting ");
                         try {
                             p = pb.start();
                         } catch (IOException e) {
@@ -220,9 +220,17 @@ public class Starter {
 
                 System.out.format("%s: %s\n", eventName, child);
                 String filename = child.getFileName().toString();
-                System.out.println(" >> " + filename.endsWith(".js"));
-                System.out.println(" >> " + kind);
+
+                if(filename.endsWith(".coffee") && kind == ENTRY_MODIFY) {
+                	// re-compile down to target/
+                }
+
                 if(filename.endsWith(".js") && kind == ENTRY_MODIFY) {
+
+                	// TODO
+                	// check if it's under target/web
+                	// if not: it's server-side code, restart vert.x
+
                     System.out.println("Destroying " + p);
                     p.destroy();
                     try {
