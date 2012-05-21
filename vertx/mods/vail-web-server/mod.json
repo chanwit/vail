@@ -1,0 +1,4 @@
+{
+  "main": "org.vertx.mods.VailWebServer",
+  "preserve-cwd": true
+}

@@ -6,4 +6,4 @@ webServerConf =
 	ssl: false
 	bridge: true
 
-vertx.deployVerticle('web-server', webServerConf)
+vertx.deployVerticle('vail-web-server', webServerConf)
