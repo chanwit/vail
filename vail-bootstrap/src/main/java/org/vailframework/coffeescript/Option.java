@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package org.vail.coffeescript;
+package org.vailframework.coffeescript;
 
-import org.mozilla.javascript.JavaScriptException;
-
-public class CoffeeScriptCompileException extends Exception {
-
-    CoffeeScriptCompileException (JavaScriptException e) {
-        super(e.getValue().toString(), e);
-    }
-
+public enum Option {
+	BARE
 }

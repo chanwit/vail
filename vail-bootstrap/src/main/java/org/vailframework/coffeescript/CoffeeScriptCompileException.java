@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package org.vail.coffeescript;
+package org.vailframework.coffeescript;
 
-import java.util.Collection;
+import org.mozilla.javascript.JavaScriptException;
 
-public class Options {
-    private final String javaScriptOptions;
+public class CoffeeScriptCompileException extends Exception {
 
-    public Options(Collection<Option> options) {
-        javaScriptOptions = String.format("{bare: %b}", options.contains(Option.BARE));
+	private static final long serialVersionUID = -7059326059616728737L;
+
+	CoffeeScriptCompileException (JavaScriptException e) {
+        super(e.getValue().toString(), e);
     }
 
-    public String toJavaScript() {
-        return javaScriptOptions;
-    }
 }

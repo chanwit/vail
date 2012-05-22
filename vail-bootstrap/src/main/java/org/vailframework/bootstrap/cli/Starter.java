@@ -1,4 +1,4 @@
-package org.vail.bootstrap.cli;
+package org.vailframework.bootstrap.cli;
 
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.*;
@@ -10,8 +10,8 @@ import java.nio.file.attribute.*;
 import java.io.*;
 import java.util.*;
 
-import org.vail.coffeescript.Main;
-import org.vail.coffeescript.walker.BatchCompiler;
+import org.vailframework.coffeescript.Main;
+import org.vailframework.coffeescript.walker.BatchCompiler;
 
 
 public class Starter {

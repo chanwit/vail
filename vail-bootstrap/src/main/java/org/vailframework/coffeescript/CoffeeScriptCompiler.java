@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.vail.coffeescript;
+package org.vailframework.coffeescript;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.JavaScriptException;

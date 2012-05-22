@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.vail.coffeescript;
+package org.vailframework.coffeescript;
 
 import java.io.IOException;
 import java.io.InputStream;
