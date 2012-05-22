@@ -11,10 +11,13 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import org.vailframework.coffeescript.Main;
+
 public class BatchCompiler {
 
 	public void compile(final String srcDir, final String dstDir) {
 		Path dir = Paths.get(srcDir);
+		System.out.println("dir: " + dir);
 		try {
 		  Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
 
@@ -22,17 +25,17 @@ public class BatchCompiler {
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 				String fullpath = file.toAbsolutePath().toString();
 				String s = srcDir.replaceAll("\\\\", "\\\\\\\\").replaceAll("\\:", "\\\\:");
-				if(s.endsWith(File.separator)==false) {
-					s += File.separator;
-				}
 				String localpath = fullpath.replaceFirst(s, "");
+				if(localpath.startsWith(File.separator)) {
+					localpath = localpath.substring(1);
+				}
 				if(localpath.endsWith(".coffee")) {
 					if(localpath.equals("app.coffee")) {
-						System.out.println("compile directly to app.coffee");
+						System.out.println("compile app.coffee directly to app.js");
 						String target = (dstDir + java.io.File.separator + localpath).replaceAll("\\.coffee", ".js");
 						FileInputStream fin = new FileInputStream(file.toFile());
 						PrintStream fw = new java.io.PrintStream(new File(target));
-						new org.vailframework.coffeescript.Main().execute(new String[]{"--bare"}, fw, fin);
+						new Main().execute(new String[]{"--bare"}, fw, fin);
 					} else {
 						System.out.println("collecting " + localpath);
 						// and compile all .coffee into out.js
