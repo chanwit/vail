@@ -10,7 +10,8 @@ import java.nio.file.attribute.*;
 import java.io.*;
 import java.util.*;
 
-import org.jcoffeescript.Main;
+import org.vail.coffeescript.Main;
+import org.vail.coffeescript.walker.BatchCompiler;
 
 
 public class Starter {
@@ -284,16 +285,10 @@ public class Starter {
     }
 
 	private static void compileAppJS(String workdir) {
-		Path app    = Paths.get(workdir, "app",    "app.coffee");
-		Path target = Paths.get(workdir, "target", "app.js");
-
-		try {
-			PrintStream fw = new java.io.PrintStream(target.toFile());
-			FileInputStream fin = new FileInputStream(app.toFile());
-			new Main().execute(new String[]{"--bare"}, fw, fin);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		Path app    = Paths.get(workdir, "app");
+		Path target = Paths.get(workdir, "target");
+		new BatchCompiler().compile(app.toAbsolutePath().toString(),
+									target.toAbsolutePath().toString());
 	}
 
 }

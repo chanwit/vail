@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jcoffeescript;
+package org.vail.coffeescript;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.JavaScriptException;
@@ -28,16 +28,16 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Collections;
 
-public class JCoffeeScriptCompiler {
+public class CoffeeScriptCompiler {
 
     private final Scriptable globalScope;
     private final Options options;
 
-	 public JCoffeeScriptCompiler() {
+	 public CoffeeScriptCompiler() {
         this(Collections.<Option>emptyList());
     }
 
-	public JCoffeeScriptCompiler(Collection<Option> options) {
+	public CoffeeScriptCompiler(Collection<Option> options) {
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("org/jcoffeescript/coffee-script.js");
         try {
@@ -67,7 +67,7 @@ public class JCoffeeScriptCompiler {
         this.options = new Options(options);
     }
 
-	public String compile (String coffeeScriptSource) throws JCoffeeScriptCompileException {
+	public String compile (String coffeeScriptSource) throws CoffeeScriptCompileException {
         Context context = Context.enter();
         try {
             Scriptable compileScope = context.newObject(globalScope);
@@ -77,7 +77,7 @@ public class JCoffeeScriptCompiler {
                 return (String)context.evaluateString(compileScope, String.format("CoffeeScript.compile(coffeeScriptSource, %s);", options.toJavaScript()),
                         "JCoffeeScriptCompiler", 0, null);
             } catch (JavaScriptException e) {
-                throw new JCoffeeScriptCompileException(e);
+                throw new CoffeeScriptCompileException(e);
             }
         } finally {
             Context.exit();

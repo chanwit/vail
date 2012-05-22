@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jcoffeescript;
+package org.vail.coffeescript;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,8 +34,8 @@ public class Main {
     public void execute(String[] args, PrintStream out, InputStream in) {
         final Collection<Option> options = readOptionsFrom(args);
         try {
-            out.print(new JCoffeeScriptCompiler(options).compile(readSourceFrom(in)));
-        } catch (JCoffeeScriptCompileException e) {
+            out.print(new CoffeeScriptCompiler(options).compile(readSourceFrom(in)));
+        } catch (CoffeeScriptCompileException e) {
             System.err.println(e.getMessage());
         }
     }

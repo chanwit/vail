@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package org.jcoffeescript;
+package org.vail.coffeescript;
 
-import java.util.Collection;
+import org.mozilla.javascript.JavaScriptException;
 
-public class Options {
-    private final String javaScriptOptions;
+public class CoffeeScriptCompileException extends Exception {
 
-    public Options(Collection<Option> options) {
-        javaScriptOptions = String.format("{bare: %b}", options.contains(Option.BARE));
+    CoffeeScriptCompileException (JavaScriptException e) {
+        super(e.getValue().toString(), e);
     }
 
-    public String toJavaScript() {
-        return javaScriptOptions;
-    }
 }
